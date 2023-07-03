@@ -21,7 +21,7 @@ public class Categoria {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nombre;
-	@OneToMany
+	@OneToMany(mappedBy = "categoria")
 	private List<Producto> productos;
 
 }

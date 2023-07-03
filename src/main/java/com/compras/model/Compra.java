@@ -24,7 +24,7 @@ public class Compra {
 	private Integer id;
 	private String numero;
 	private LocalDate fecha;
-	@OneToMany
+	@OneToMany(mappedBy = "compra")
 	private List<DetalleCompra> detalle;
 	private Double total;
 	@OneToOne
