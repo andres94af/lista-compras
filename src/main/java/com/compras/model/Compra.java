@@ -22,11 +22,11 @@ public class Compra {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String numero;
 	private LocalDate fecha;
 	@OneToMany(mappedBy = "compra")
 	private List<DetalleCompra> detalle;
 	private Double total;
+	private Boolean completada;
 	@OneToOne
 	private Usuario usuario;
 	
