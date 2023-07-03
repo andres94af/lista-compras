@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.compras.model.Categoria;
 import com.compras.model.Producto;
 import com.compras.repository.ProductoRepository;
 import com.compras.service.ProductoService;
@@ -34,6 +35,11 @@ public class ProductoServiceImpl implements ProductoService {
 	@Override
 	public Producto save(Producto producto) {
 		return productoRepository.save(producto);
+	}
+
+	@Override
+	public List<Producto> findByCategoria(Categoria categoria) {
+		return productoRepository.findByCategoria(categoria);
 	}
 
 }
