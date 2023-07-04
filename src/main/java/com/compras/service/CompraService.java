@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.compras.model.Compra;
+import com.compras.model.Usuario;
 
 public interface CompraService {
 
@@ -14,5 +15,7 @@ public interface CompraService {
 	List<Compra> findAll();
 
 	void delete(Integer id);
+
+	List<Compra> findAllByUsuario(Usuario usuario);
 
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.compras.model.Compra;
+import com.compras.model.Usuario;
 import com.compras.repository.CompraRepository;
 import com.compras.service.CompraService;
 
@@ -34,6 +35,11 @@ public class CompraServiceImpl implements CompraService {
 	@Override
 	public void delete(Integer id) {
 		compraRepository.deleteById(id);
+	}
+
+	@Override
+	public List<Compra> findAllByUsuario(Usuario usuario) {
+		return compraRepository.findByUsuario(usuario);
 	}
 
 }

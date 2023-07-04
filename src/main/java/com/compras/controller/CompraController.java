@@ -13,6 +13,7 @@ import com.compras.model.Compra;
 import com.compras.model.DetalleCompra;
 import com.compras.model.Usuario;
 import com.compras.service.CompraService;
+import com.compras.service.DetalleCompraService;
 import com.compras.service.UsuarioService;
 
 @RestController
@@ -24,11 +25,15 @@ public class CompraController {
 	
 	@Autowired
 	UsuarioService usuarioService;
+	
+	@Autowired
+	DetalleCompraService detalleCompraService;
 
-	//Prueba controlador compra. Mensaje "Bienvenido!"
-	@GetMapping
-	public ResponseEntity<String> bienvenido(){
-		return ResponseEntity.ok("Bienvenido!");
+	//Retorna listado de todas las compras registradas
+	@GetMapping("/{idCompra}")
+	public ResponseEntity<Compra> compra(@PathVariable Integer idCompra){
+		Compra compra = compraService.findById(idCompra).get();
+		return ResponseEntity.ok(compra);
 	}
 	
 	//Retorna un listado de todas las compras hechas por un usuario.
@@ -39,7 +44,7 @@ public class CompraController {
 		
 		if(usuario.isPresent()) {
 			List<Compra> listado = new ArrayList<>();
-			listado = usuario.get().getCompras();
+			listado = compraService.findAllByUsuario(usuario.get());
 			return ResponseEntity.ok(listado);
 		}
 		
@@ -48,13 +53,13 @@ public class CompraController {
 	
 	//Retorna un listado de los detalles de una compra
 	//Si la compra no existe retorna un estado "No content".
-	@GetMapping("/{idCompra}")
+	@GetMapping("/detalle/{idCompra}")
 	public ResponseEntity<List<DetalleCompra>> detallesDeCompra(@PathVariable Integer idCompra){
 		Optional<Compra> compra = compraService.findById(idCompra);
 		
 		if(compra.isPresent()) {
 			List<DetalleCompra> listado = new ArrayList<>();
-			listado = compra.get().getDetalles();
+			listado = detalleCompraService.findByCompra(compra.get());
 			return ResponseEntity.ok(listado);
 		}
 		
