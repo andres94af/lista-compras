@@ -18,4 +18,6 @@ public interface ProductoService {
 	
 	List<Producto> findByCategoria(Categoria categoria);
 
+	List<Producto> findFiltered(String valorFiltro);
+
 }

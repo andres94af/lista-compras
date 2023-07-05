@@ -47,5 +47,13 @@ public class ProductoController {
 		}
 		return ResponseEntity.unprocessableEntity().build();
 	}
+	
+	// Retorna listado de todas los productos filtrados
+	@GetMapping("/filtrado/{valorFiltro}")
+	public ResponseEntity<List<Producto>> listadoDeProductosFiltrados(@PathVariable String valorFiltro) {
+		List<Producto> productos = new ArrayList<>();
+		productos = productoService.findFiltered(valorFiltro);
+		return ResponseEntity.ok(productos);
+	}
 
 }

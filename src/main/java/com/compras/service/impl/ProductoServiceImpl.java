@@ -1,5 +1,7 @@
 package com.compras.service.impl;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +26,10 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Override
 	public List<Producto> findAll() {
-		return productoRepository.findAll();
+		List<Producto> listaDesordenada = productoRepository.findAll();
+		List<Producto> listaOrdenada = listaDesordenada.stream().sorted(Comparator.comparing(Producto::getNombre))
+				.toList();
+		return listaOrdenada;
 	}
 
 	@Override
@@ -39,7 +44,17 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Override
 	public List<Producto> findByCategoria(Categoria categoria) {
-		return productoRepository.findByCategoria(categoria);
+		List<Producto> listaDesordenada = productoRepository.findByCategoria(categoria);
+		List<Producto> listaOrdenada = listaDesordenada.stream().sorted(Comparator.comparing(Producto::getNombre))
+				.toList();
+		return listaOrdenada;
+	}
+
+	@Override
+	public List<Producto> findFiltered(String valorFiltro) {
+		List<Producto> listadoCompleto = findAll();
+		listadoCompleto = listadoCompleto.stream().filter(p -> p.getNombre().toLowerCase().contains(valorFiltro.toLowerCase())).toList();
+		return listadoCompleto;
 	}
 
 }
