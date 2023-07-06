@@ -21,50 +21,54 @@ import com.compras.service.UsuarioService;
 @RequestMapping("/compra")
 @CrossOrigin("http://localhost:4200")
 public class CompraController {
-	
+
 	@Autowired
 	CompraService compraService;
-	
+
 	@Autowired
 	UsuarioService usuarioService;
-	
+
 	@Autowired
 	DetalleCompraService detalleCompraService;
 
-	//Retorna listado de todas las compras registradas
+	// Retorna listado de todas las compras registradas
 	@GetMapping("/{idCompra}")
-	public ResponseEntity<Compra> compra(@PathVariable Integer idCompra){
+	public ResponseEntity<Compra> compra(@PathVariable Integer idCompra) {
 		Compra compra = compraService.findById(idCompra).get();
 		return ResponseEntity.ok(compra);
 	}
-	
-	//Retorna un listado de todas las compras hechas por un usuario.
-	//Si el usuario no existe retorna un estado "No content".
+
+	/**
+	 * @param idUsuario
+	 * @return Retorna un ResponseEntity con un listado de todas las compras hechas
+	 *         por un usuario con id pasado por parametro. Si el usuario no existe
+	 *         retorna un estado "No content".
+	 */
 	@GetMapping("/usuario/{idUsuario}")
-	public ResponseEntity<List<Compra>> listaDeComprasPorUsuario(@PathVariable Integer idUsuario){
+	public ResponseEntity<List<Compra>> listaDeComprasPorUsuario(@PathVariable Integer idUsuario) {
 		Optional<Usuario> usuario = usuarioService.findById(idUsuario);
-		
-		if(usuario.isPresent()) {
+		if (usuario.isPresent()) {
 			List<Compra> listado = new ArrayList<>();
 			listado = compraService.findAllByUsuario(usuario.get());
 			return ResponseEntity.ok(listado);
 		}
-		
 		return ResponseEntity.noContent().build();
 	}
-	
-	//Retorna un listado de los detalles de una compra
-	//Si la compra no existe retorna un estado "No content".
+
+	/**
+	 * @param idCompra
+	 * @return Retorna un ResponseEntity con un listado de los detalles de una
+	 *         compra con el idCompra pasado por parámetro. Si la compra no existe
+	 *         retorna un estado "No content".
+	 */
 	@GetMapping("/detalle/{idCompra}")
-	public ResponseEntity<List<DetalleCompra>> detallesDeCompra(@PathVariable Integer idCompra){
+	public ResponseEntity<List<DetalleCompra>> detallesDeCompra(@PathVariable Integer idCompra) {
 		Optional<Compra> compra = compraService.findById(idCompra);
-		
-		if(compra.isPresent()) {
+		if (compra.isPresent()) {
 			List<DetalleCompra> listado = new ArrayList<>();
 			listado = detalleCompraService.findByCompra(compra.get());
 			return ResponseEntity.ok(listado);
 		}
-		
 		return ResponseEntity.noContent().build();
 	}
 
