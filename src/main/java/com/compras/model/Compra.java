@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,7 +36,7 @@ public class Compra {
 	private LocalDate fecha;
 
 	@JsonManagedReference
-	@OneToMany(mappedBy = "compra")
+	@OneToMany(mappedBy = "compra", cascade = CascadeType.ALL)
 	private List<DetalleCompra> detalles;
 
 	private Double total;

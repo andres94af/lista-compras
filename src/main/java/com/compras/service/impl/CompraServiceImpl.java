@@ -1,5 +1,6 @@
 package com.compras.service.impl;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,7 +40,9 @@ public class CompraServiceImpl implements CompraService {
 
 	@Override
 	public List<Compra> findAllByUsuario(Usuario usuario) {
-		return compraRepository.findByUsuario(usuario);
+		List<Compra> listado = compraRepository.findByUsuario(usuario);
+		listado = listado.stream().sorted(Comparator.comparing(Compra::getId).reversed()).toList();
+		return listado;
 	}
 
 }

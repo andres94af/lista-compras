@@ -28,6 +28,7 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
 			d.setCompra(compra);
 			dCompraRepository.save(d);
 		}
+		detalleActual = new ArrayList<>();
 	}
 
 	@Override
