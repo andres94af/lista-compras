@@ -2,16 +2,20 @@ package com.compras.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.compras.model.Compra;
 import com.compras.model.DetalleCompra;
+import com.compras.service.CompraService;
 import com.compras.service.DetalleCompraService;
 
 @RestController
@@ -22,14 +26,32 @@ public class DetalleCompraController {
 	@Autowired
 	DetalleCompraService detalleService;
 
-	List<DetalleCompra> detalleActual = new ArrayList<>();
+	@Autowired
+	CompraService compraService;
 
 	/**
 	 * @return Retorna un ResponseEntity con el listado actual de detalles.
 	 */
 	@GetMapping
 	public ResponseEntity<List<DetalleCompra>> obtenerDetalleActual() {
-		return ResponseEntity.ok(detalleActual);
+		return ResponseEntity.ok(detalleService.obtenerDetalleActual());
+	}
+
+	/**
+	 * @param idCompra
+	 * @return Retorna un ResponseEntity con un listado de los detalles de una
+	 *         compra con el idCompra pasado por parámetro. Si la compra no existe
+	 *         retorna un estado "No content".
+	 */
+	@GetMapping("/{idCompra}")
+	public ResponseEntity<List<DetalleCompra>> detallesDeCompra(@PathVariable Integer idCompra) {
+		Optional<Compra> compra = compraService.findById(idCompra);
+		if (compra.isPresent()) {
+			List<DetalleCompra> listado = new ArrayList<>();
+			listado = detalleService.findByCompra(compra.get());
+			return ResponseEntity.ok(listado);
+		}
+		return ResponseEntity.noContent().build();
 	}
 
 	/**
@@ -40,24 +62,7 @@ public class DetalleCompraController {
 	 */
 	@PostMapping("/agregar")
 	public ResponseEntity<List<DetalleCompra>> agregarDetalle(@RequestBody DetalleCompra detalle) {
-		detalleActual.add(detalle);
-		return ResponseEntity.ok(detalleActual);
-	}
-
-	/**
-	 * @param compra
-	 * @return Asigna la nueva compra a cada detalle de la lista y guarda los mismos
-	 *         en la BBDD Retorna un ResponseEntity con un nuevo listado de
-	 *         detalles;
-	 */
-	@PostMapping("/guardar")
-	public ResponseEntity<List<DetalleCompra>> guardarDetalles(@RequestBody Compra compra) {
-		for (DetalleCompra detalle : detalleActual) {
-			detalle.setCompra(compra);
-			detalleService.save(detalle);
-		}
-		detalleActual = new ArrayList<>();
-		return ResponseEntity.ok(detalleActual);
+		return ResponseEntity.ok(detalleService.agregarAlDetalleActual(detalle));
 	}
 
 	/**
@@ -66,8 +71,7 @@ public class DetalleCompraController {
 	 */
 	@GetMapping("/eliminar")
 	public ResponseEntity<List<DetalleCompra>> eliminarDetallesDelListado() {
-		detalleActual = new ArrayList<>();
-		return ResponseEntity.ok(detalleActual);
+		return ResponseEntity.ok(detalleService.borrarDetalleActual());
 	}
 
 }

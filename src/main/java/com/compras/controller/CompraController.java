@@ -8,10 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.compras.model.Compra;
-import com.compras.model.DetalleCompra;
 import com.compras.model.Usuario;
 import com.compras.service.CompraService;
 import com.compras.service.DetalleCompraService;
@@ -55,21 +56,16 @@ public class CompraController {
 		return ResponseEntity.noContent().build();
 	}
 
-	/**
-	 * @param idCompra
-	 * @return Retorna un ResponseEntity con un listado de los detalles de una
-	 *         compra con el idCompra pasado por parámetro. Si la compra no existe
-	 *         retorna un estado "No content".
-	 */
-	@GetMapping("/detalle/{idCompra}")
-	public ResponseEntity<List<DetalleCompra>> detallesDeCompra(@PathVariable Integer idCompra) {
-		Optional<Compra> compra = compraService.findById(idCompra);
-		if (compra.isPresent()) {
-			List<DetalleCompra> listado = new ArrayList<>();
-			listado = detalleCompraService.findByCompra(compra.get());
-			return ResponseEntity.ok(listado);
+	@PostMapping("/{idUsuario}")
+	public ResponseEntity<Compra> generarNuevaCompra(@RequestBody Compra compra, @PathVariable Integer idUsuario) {
+		Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
+		if (usuarioOpt.isPresent()) {
+			compra.setUsuario(usuarioOpt.get());
+			Compra nuevaCompra = compraService.save(compra);
+			detalleCompraService.save(compra);
+			return ResponseEntity.ok(nuevaCompra);
 		}
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok(compra);
 	}
 
 }

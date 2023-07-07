@@ -8,6 +8,12 @@ public interface DetalleCompraService {
 
 	List<DetalleCompra> findByCompra(Compra compra);
 
-	void save(DetalleCompra detalleCompra);
+	void save(Compra compra);
+
+	List<DetalleCompra> obtenerDetalleActual();
+
+	List<DetalleCompra> agregarAlDetalleActual(DetalleCompra detalle);
+
+	List<DetalleCompra> borrarDetalleActual();
 
 }
