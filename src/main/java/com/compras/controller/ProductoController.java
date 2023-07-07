@@ -30,7 +30,10 @@ public class ProductoController {
 	@Autowired
 	CategoriaService categoriaService;
 
-	// Retorna listado de todas los productos registrados
+	/**
+	 * @return
+	 * Retorna un ResponseEntity con un listado de todos los productos existentes.
+	 */
 	@GetMapping
 	public ResponseEntity<List<Producto>> listadoDeProductos() {
 		List<Producto> productos = new ArrayList<>();
@@ -38,23 +41,33 @@ public class ProductoController {
 		return ResponseEntity.ok(productos);
 	}
 
-	// Retorna un listado de productos de una categoria específica.
-	// Si la categoria no existe retorna un estado "No content".
+	/**
+	 * @param catId
+	 * @return
+	 * Retorna un ResponseEntity con un listado de productos de una categoria específica segun el id pasado por parametros.
+	 * Si la categoria no existe retorna un estado "No content".
+	 */
 	@GetMapping("/{catId}")
 	public ResponseEntity<List<Producto>> listadoDeProductosPorCategoria(@PathVariable Integer catId) {
 		Optional<Categoria> categoria = categoriaService.findById(catId);
-
 		if (categoria.isPresent()) {
 			List<Producto> productos = new ArrayList<>();
 			productos = productoService.findByCategoria(categoria.get());
 			return ResponseEntity.ok(productos);
 		}
-
 		return ResponseEntity.noContent().build();
 	}
 
-	// Inserta nuevo item de producto y lo retorna
-	@PostMapping("/nuevo/{catId}")
+	/**
+	 * @param producto
+	 * @param catId
+	 * @return
+	 * Retorna un ResponseEntiity con un producto.
+	 * Primero verifica que la categoria exista en la BBDD.
+	 * Si existe, agrega el producto con los criterios de ProductoService.save().
+	 * Si no existe, retorna un error 422 (UnprecessableEntity).
+	 */
+	@PostMapping("/{catId}")
 	public ResponseEntity<Producto> crearProducto(@RequestBody Producto producto, @PathVariable Integer catId) {
 		if (categoriaService.findById(catId).isPresent()) {
 			Categoria cat = new Categoria();
@@ -65,7 +78,11 @@ public class ProductoController {
 		return ResponseEntity.unprocessableEntity().build();
 	}
 
-	// Retorna listado de todas los productos filtrados
+	/**
+	 * @param valorFiltro
+	 * @return
+	 * Retorna un ResponseEntity con un listado de productos filtrados por nombre a partir del parametro valor filtro.
+	 */
 	@GetMapping("/filtrado/{valorFiltro}")
 	public ResponseEntity<List<Producto>> listadoDeProductosFiltrados(@PathVariable String valorFiltro) {
 		List<Producto> productos = new ArrayList<>();

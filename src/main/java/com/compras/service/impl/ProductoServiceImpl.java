@@ -35,15 +35,18 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Override
 	public Producto save(Producto producto) {
-		return productoRepository.save(producto);
+		Optional<Producto> productoOpt = productoRepository.findByNombre(producto.getNombre());
+		if (!productoOpt.isPresent()) {
+			return productoRepository.save(producto);		
+		}
+		return productoOpt.get();
 	}
 
 	@Override
 	public List<Producto> findByCategoria(Categoria categoria) {
-		List<Producto> listaDesordenada = productoRepository.findByCategoria(categoria);
-		List<Producto> listaOrdenada = listaDesordenada.stream().sorted(Comparator.comparing(Producto::getNombre))
-				.toList();
-		return listaOrdenada;
+		List<Producto> lista = productoRepository.findByCategoria(categoria);
+		lista = lista.stream().sorted(Comparator.comparing(Producto::getNombre)).toList();
+		return lista;
 	}
 
 	@Override
