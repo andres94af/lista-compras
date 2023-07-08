@@ -26,6 +26,7 @@ public class Producto {
 	private String nombre;
 	private String informacion;
 	private String imgUrl;
+	private String imgId;
 	private Double precioUnitario;
 	
 	@JsonBackReference
