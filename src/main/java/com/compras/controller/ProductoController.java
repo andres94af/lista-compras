@@ -3,17 +3,14 @@ package com.compras.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.compras.model.Categoria;
 import com.compras.model.Producto;
 import com.compras.service.CategoriaService;
@@ -21,7 +18,6 @@ import com.compras.service.ProductoService;
 
 @RestController
 @RequestMapping("/producto")
-@CrossOrigin("http://localhost:4200")
 public class ProductoController {
 
 	@Autowired
@@ -31,8 +27,8 @@ public class ProductoController {
 	CategoriaService categoriaService;
 
 	/**
-	 * @return
-	 * Retorna un ResponseEntity con un listado de todos los productos existentes.
+	 * @return Retorna un ResponseEntity con un listado de todos los productos
+	 *         existentes.
 	 */
 	@GetMapping
 	public ResponseEntity<List<Producto>> listadoDeProductos() {
@@ -43,9 +39,9 @@ public class ProductoController {
 
 	/**
 	 * @param catId
-	 * @return
-	 * Retorna un ResponseEntity con un listado de productos de una categoria específica segun el id pasado por parametros.
-	 * Si la categoria no existe retorna un estado "No content".
+	 * @return Retorna un ResponseEntity con un listado de productos de una
+	 *         categoria específica segun el id pasado por parametros. Si la
+	 *         categoria no existe retorna un estado "No content".
 	 */
 	@GetMapping("/{catId}")
 	public ResponseEntity<List<Producto>> listadoDeProductosPorCategoria(@PathVariable Integer catId) {
@@ -61,11 +57,10 @@ public class ProductoController {
 	/**
 	 * @param producto
 	 * @param catId
-	 * @return
-	 * Retorna un ResponseEntiity con un producto.
-	 * Primero verifica que la categoria exista en la BBDD.
-	 * Si existe, agrega el producto con los criterios de ProductoService.save().
-	 * Si no existe, retorna un error 422 (UnprecessableEntity).
+	 * @return Retorna un ResponseEntiity con un producto. Primero verifica que la
+	 *         categoria exista en la BBDD. Si existe, agrega el producto con los
+	 *         criterios de ProductoService.save(). Si no existe, retorna un error
+	 *         422 (UnprecessableEntity).
 	 */
 	@PostMapping("/{catId}")
 	public ResponseEntity<Producto> crearProducto(@RequestBody Producto producto, @PathVariable Integer catId) {
@@ -80,8 +75,8 @@ public class ProductoController {
 
 	/**
 	 * @param valorFiltro
-	 * @return
-	 * Retorna un ResponseEntity con un listado de productos filtrados por nombre a partir del parametro valor filtro.
+	 * @return Retorna un ResponseEntity con un listado de productos filtrados por
+	 *         nombre a partir del parametro valor filtro.
 	 */
 	@GetMapping("/filtrado/{valorFiltro}")
 	public ResponseEntity<List<Producto>> listadoDeProductosFiltrados(@PathVariable String valorFiltro) {

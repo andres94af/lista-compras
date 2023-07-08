@@ -1,21 +1,18 @@
 package com.compras.service;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.cloudinary.Cloudinary;
 import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
 
 @Service
-@SuppressWarnings({ "unchecked" })
+@SuppressWarnings("unchecked")
 public class CloudinaryService {
-
+	
 	Cloudinary cloudinary;
 
 	private static final String cloud_name = "da52tfqfk";
@@ -30,26 +27,19 @@ public class CloudinaryService {
 		valuesMap.put("api_secret", api_secret);
 		cloudinary = new Cloudinary(valuesMap);
 	}
-
 	
-	public Map<Object, Object> upload(MultipartFile multipartFile) throws IOException {
-		File file = convert(multipartFile);
-		Map<Object, Object> result = cloudinary.uploader().upload(file, ObjectUtils.asMap("folder", "lista-compras", "transformation",
-				new Transformation<>().aspectRatio("1.0").gravity("auto").width(650).crop("fill")));
-		file.delete();
+	
+	@SuppressWarnings("rawtypes")
+	public Map<Object, Object> upload(MultipartFile file) throws IOException {
+		Map<Object, Object> result = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("folder", "lista-compras", "transformation",
+				new Transformation().aspectRatio("1.0").gravity("auto").width(650).crop("fill")));
 		return result;
 	}
+	
 
 	public Map<Object, Object> delete(String id) throws IOException {
 		Map<Object, Object> result = cloudinary.uploader().destroy(id, ObjectUtils.emptyMap());
 		return result;
 	}
 
-	private File convert(MultipartFile multipartFile) throws IOException {
-		File file = new File(multipartFile.getOriginalFilename());
-		FileOutputStream fo = new FileOutputStream(file);
-		fo.write(multipartFile.getBytes());
-		fo.close();
-		return file;
-	}
 }
