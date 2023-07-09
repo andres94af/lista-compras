@@ -39,10 +39,11 @@ public class SecurityConfig {
 				.cors().and()
 				.csrf(c -> c.disable())
 				.authorizeHttpRequests(auth -> {
-					auth.requestMatchers("/categoria").permitAll();
 					auth.requestMatchers("/login").permitAll();
-					auth.requestMatchers("/producto").permitAll();
+					auth.requestMatchers("/logout").permitAll();
 					auth.requestMatchers("/usuario/nuevo").permitAll();
+					auth.requestMatchers("/categoria/listar").permitAll();
+					auth.requestMatchers("/producto/listar/**").permitAll();
 					auth.anyRequest().authenticated();
 				})
 				.sessionManagement(session ->{

@@ -27,7 +27,7 @@ public class CategoriaController {
 	 * @return Retorna un ResponseEntity con un listado de todas las categorias
 	 *         existentes en la BBDD.
 	 */
-	@GetMapping
+	@GetMapping("/listar")
 	public ResponseEntity<List<Categoria>> listadoDeCategorias() {
 		List<Categoria> categorias = new ArrayList<>();
 		categorias = categoriaService.findAll();

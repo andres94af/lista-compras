@@ -30,7 +30,7 @@ public class ProductoController {
 	 * @return Retorna un ResponseEntity con un listado de todos los productos
 	 *         existentes.
 	 */
-	@GetMapping
+	@GetMapping("/listar")
 	public ResponseEntity<List<Producto>> listadoDeProductos() {
 		List<Producto> productos = new ArrayList<>();
 		productos = productoService.findAll();
@@ -43,7 +43,7 @@ public class ProductoController {
 	 *         categoria específica segun el id pasado por parametros. Si la
 	 *         categoria no existe retorna un estado "No content".
 	 */
-	@GetMapping("/{catId}")
+	@GetMapping("/listar/{catId}")
 	public ResponseEntity<List<Producto>> listadoDeProductosPorCategoria(@PathVariable Integer catId) {
 		Optional<Categoria> categoria = categoriaService.findById(catId);
 		if (categoria.isPresent()) {
@@ -52,6 +52,18 @@ public class ProductoController {
 			return ResponseEntity.ok(productos);
 		}
 		return ResponseEntity.noContent().build();
+	}
+
+	/**
+	 * @param valorFiltro
+	 * @return Retorna un ResponseEntity con un listado de productos filtrados por
+	 *         nombre a partir del parametro valor filtro.
+	 */
+	@GetMapping("/listar/filtrado/{valorFiltro}")
+	public ResponseEntity<List<Producto>> listadoDeProductosFiltrados(@PathVariable String valorFiltro) {
+		List<Producto> productos = new ArrayList<>();
+		productos = productoService.findFiltered(valorFiltro);
+		return ResponseEntity.ok(productos);
 	}
 
 	/**
@@ -71,18 +83,6 @@ public class ProductoController {
 			return ResponseEntity.ok(productoService.save(producto));
 		}
 		return ResponseEntity.unprocessableEntity().build();
-	}
-
-	/**
-	 * @param valorFiltro
-	 * @return Retorna un ResponseEntity con un listado de productos filtrados por
-	 *         nombre a partir del parametro valor filtro.
-	 */
-	@GetMapping("/filtrado/{valorFiltro}")
-	public ResponseEntity<List<Producto>> listadoDeProductosFiltrados(@PathVariable String valorFiltro) {
-		List<Producto> productos = new ArrayList<>();
-		productos = productoService.findFiltered(valorFiltro);
-		return ResponseEntity.ok(productos);
 	}
 
 }

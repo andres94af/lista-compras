@@ -47,6 +47,12 @@ public class JwtUtils {
 		return getClaim(token, Claims::getSubject);
 	}
 	
+	//Obtener el username del Bearer token
+	public String getUsernameFromBearerToken(String bearerToken) {
+		String token = bearerToken.replace("Bearer ", "");
+		return getClaim(token, Claims::getSubject);
+	}
+	
 	
 	//Obtener un solo claim
 	public <T> T getClaim(String token, Function<Claims, T> claimsTFunction) {

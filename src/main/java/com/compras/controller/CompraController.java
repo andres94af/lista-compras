@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.compras.model.Compra;
 import com.compras.model.Usuario;
+import com.compras.security.jwt.JwtUtils;
 import com.compras.service.CompraService;
 import com.compras.service.DetalleCompraService;
 import com.compras.service.UsuarioService;
@@ -30,13 +32,9 @@ public class CompraController {
 
 	@Autowired
 	DetalleCompraService detalleCompraService;
-
-	// Retorna listado de todas las compras registradas
-	@GetMapping("/{idCompra}")
-	public ResponseEntity<Compra> compra(@PathVariable Integer idCompra) {
-		Compra compra = compraService.findById(idCompra).get();
-		return ResponseEntity.ok(compra);
-	}
+	
+	@Autowired
+	JwtUtils jwtUtils;
 
 	/**
 	 * @param idUsuario
@@ -44,9 +42,10 @@ public class CompraController {
 	 *         por un usuario con id pasado por parametro. Si el usuario no existe
 	 *         retorna un estado "No content".
 	 */
-	@GetMapping("/usuario/{idUsuario}")
-	public ResponseEntity<List<Compra>> listaDeComprasPorUsuario(@PathVariable Integer idUsuario) {
-		Optional<Usuario> usuario = usuarioService.findById(idUsuario);
+	@GetMapping("/usuario")
+	public ResponseEntity<List<Compra>> listaDeComprasPorUsuario(@RequestHeader("Authorization") String bearerToken) {
+		String username = jwtUtils.getUsernameFromBearerToken(bearerToken);
+		Optional<Usuario> usuario = usuarioService.findByUsername(username);
 		if (usuario.isPresent()) {
 			List<Compra> listado = new ArrayList<>();
 			listado = compraService.findAllByUsuario(usuario.get());
@@ -55,9 +54,10 @@ public class CompraController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PostMapping("/{idUsuario}")
-	public ResponseEntity<Compra> generarNuevaCompra(@RequestBody Compra compra, @PathVariable Integer idUsuario) {
-		Optional<Usuario> usuarioOpt = usuarioService.findById(idUsuario);
+	@PostMapping
+	public ResponseEntity<Compra> generarNuevaCompra(@RequestBody Compra compra, @RequestHeader("Authorization") String bearerToken) {
+		String username = jwtUtils.getUsernameFromBearerToken(bearerToken);
+		Optional<Usuario> usuarioOpt = usuarioService.findByUsername(username);
 		if (usuarioOpt.isPresent()) {
 			compra.setUsuario(usuarioOpt.get());
 			Compra nuevaCompra = compraService.save(compra);
@@ -66,7 +66,7 @@ public class CompraController {
 		}
 		return ResponseEntity.ok(compra);
 	}
-	
+
 	@DeleteMapping("/{compraId}")
 	public ResponseEntity<?> eliminarCompra(@PathVariable Integer compraId) {
 		compraService.delete(compraId);
