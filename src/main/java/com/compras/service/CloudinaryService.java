@@ -32,7 +32,7 @@ public class CloudinaryService {
 	@SuppressWarnings("rawtypes")
 	public Map<Object, Object> upload(MultipartFile file) throws IOException {
 		Map<Object, Object> result = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("folder", "lista-compras", "transformation",
-				new Transformation().aspectRatio("1.0").gravity("auto").width(650).crop("fill")));
+				new Transformation().aspectRatio("1.0").gravity("auto").width(500).crop("fill")));
 		return result;
 	}
 	
