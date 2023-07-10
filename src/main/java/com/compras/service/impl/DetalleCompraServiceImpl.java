@@ -1,6 +1,5 @@
 package com.compras.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
 	@Autowired
 	DetalleCompraRepository dCompraRepository;
 
-	List<DetalleCompra> detalleActual = new ArrayList<>();
 
 	@Override
 	public List<DetalleCompra> findByCompra(Compra compra) {
@@ -23,29 +21,10 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
 	}
 
 	@Override
-	public void save(Compra compra) {
-		for (DetalleCompra d : detalleActual) {
+	public void save(Compra compra, List<DetalleCompra> detalles) {
+		for (DetalleCompra d : detalles) {
 			d.setCompra(compra);
 			dCompraRepository.save(d);
 		}
-		detalleActual = new ArrayList<>();
 	}
-
-	@Override
-	public List<DetalleCompra> obtenerDetalleActual() {
-		return detalleActual;
-	}
-
-	@Override
-	public List<DetalleCompra> agregarAlDetalleActual(DetalleCompra detalle) {
-		detalleActual.add(detalle);
-		return detalleActual;
-	}
-
-	@Override
-	public List<DetalleCompra> borrarDetalleActual() {
-		detalleActual = new ArrayList<>();
-		return detalleActual;
-	}
-
 }

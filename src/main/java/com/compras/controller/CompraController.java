@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.compras.model.Compra;
+import com.compras.model.CompraDetallesDTO;
 import com.compras.model.Usuario;
 import com.compras.security.jwt.JwtUtils;
 import com.compras.service.CompraService;
@@ -55,16 +56,16 @@ public class CompraController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Compra> generarNuevaCompra(@RequestBody Compra compra, @RequestHeader("Authorization") String bearerToken) {
+	public ResponseEntity<Compra> generarNuevaCompra(@RequestBody CompraDetallesDTO compraDetalleDto, @RequestHeader("Authorization") String bearerToken) {
 		String username = jwtUtils.getUsernameFromBearerToken(bearerToken);
 		Optional<Usuario> usuarioOpt = usuarioService.findByUsername(username);
 		if (usuarioOpt.isPresent()) {
-			compra.setUsuario(usuarioOpt.get());
-			Compra nuevaCompra = compraService.save(compra);
-			detalleCompraService.save(compra);
+			compraDetalleDto.getCompra().setUsuario(usuarioOpt.get());
+			Compra nuevaCompra = compraService.save(compraDetalleDto.getCompra());
+			detalleCompraService.save(compraDetalleDto.getCompra(), compraDetalleDto.getDetalles());
 			return ResponseEntity.ok(nuevaCompra);
 		}
-		return ResponseEntity.ok(compra);
+		return ResponseEntity.ok(compraDetalleDto.getCompra());
 	}
 
 	@DeleteMapping("/{compraId}")
