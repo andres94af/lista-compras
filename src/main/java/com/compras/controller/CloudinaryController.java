@@ -15,14 +15,18 @@ import com.compras.service.CloudinaryService;
 @RequestMapping("/cloudinary")
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class CloudinaryController {
-	
+
 	@Autowired
 	CloudinaryService cloudinaryService;
-	
-	@PostMapping
-	public ResponseEntity<Map> subirImagen(@RequestParam("file") MultipartFile file){
-		Map infoImg = new HashMap<>();
 
+	/**
+	 * @param file
+	 * @return Recibe una imagen por parametro file y retorna la informacion de la
+	 *         imagen que es subida al servidor de cloudinary
+	 */
+	@PostMapping
+	public ResponseEntity<Map> subirImagen(@RequestParam("file") MultipartFile file) {
+		Map infoImg = new HashMap<>();
 		try {
 			infoImg = cloudinaryService.upload(file);
 		} catch (Exception e) {
@@ -30,8 +34,6 @@ public class CloudinaryController {
 			infoImg.put("Error", e.toString());
 			return ResponseEntity.badRequest().body(infoImg);
 		}
-		
 		return ResponseEntity.ok(infoImg);
 	}
-
 }
