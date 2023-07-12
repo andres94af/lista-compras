@@ -45,4 +45,14 @@ public class CompraServiceImpl implements CompraService {
 		return listado;
 	}
 
+	@Override
+	public Compra update(Compra compra) {
+		if (compra.getCompletada()) {
+			compra.setCompletada(false);
+		}else {
+			compra.setCompletada(true);			
+		}
+		return compraRepository.save(compra);
+	}
+
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,6 +74,20 @@ public class CompraController {
 			return ResponseEntity.ok(nuevaCompra);
 		}
 		return ResponseEntity.ok(compraDetalleDto.getCompra());
+	}
+
+	/**
+	 * @param idCompra
+	 * @return Retorna un ResponseEntity con la compra y su estado modificado a
+	 *         partir del parametro idCompra recibido.
+	 */
+	@PutMapping
+	public ResponseEntity<Compra> cambiarEstadoCompra(@RequestBody Integer idCompra) {
+		Optional<Compra> compra = compraService.findById(idCompra);
+		if (compra.isPresent()) {
+			return ResponseEntity.ok(compraService.update(compra.get()));
+		}
+		return ResponseEntity.noContent().build();
 	}
 
 	/**

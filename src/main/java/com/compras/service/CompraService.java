@@ -18,4 +18,6 @@ public interface CompraService {
 
 	List<Compra> findAllByUsuario(Usuario usuario);
 
+	Compra update(Compra compra);
+
 }
