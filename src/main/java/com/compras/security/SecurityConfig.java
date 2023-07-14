@@ -17,7 +17,6 @@ import com.compras.security.jwt.JwtUtils;
 import com.compras.service.impl.UserDetailsServiceImpl;
 
 @Configuration
-@SuppressWarnings("removal")
 public class SecurityConfig {
 	
 	@Autowired
@@ -36,7 +35,7 @@ public class SecurityConfig {
 		jwtAuthenticationFilter.setAuthenticationManager(authManager);
 		
 		return http
-				.cors().and()
+				.cors(cors -> {})
 				.csrf(c -> c.disable())
 				.authorizeHttpRequests(auth -> {
 					auth.requestMatchers("/login").permitAll();
@@ -62,9 +61,10 @@ public class SecurityConfig {
 	
 	@Bean
 	AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
-		return http.getSharedObject(AuthenticationManagerBuilder.class)
-				.userDetailsService(userDetailsService)
-				.passwordEncoder(passwordEncoder)
-				.and().build();
+		AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+		authBuilder
+			.userDetailsService(userDetailsService)
+			.passwordEncoder(passwordEncoder);
+		return authBuilder.build();
 	}
 }

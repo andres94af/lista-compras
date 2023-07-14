@@ -16,8 +16,9 @@ public class CategoriaServiceImpl implements CategoriaService {
 	CategoriaRepository categoriaRepository;
 
 	/**
-	 * Verifica que no exista una categoria con el mismo nombre que viene por parametro.
-	 * Si no existe, la guarda en la BBDD. Si existe, retorna la categoria existente
+	 * Verifica que no exista una categoria con el mismo nombre que viene por
+	 * parametro. Si no existe, la guarda en la BBDD. Si existe, retorna la
+	 * categoria existente
 	 */
 	@Override
 	public Categoria save(Categoria categoria) {
@@ -29,7 +30,8 @@ public class CategoriaServiceImpl implements CategoriaService {
 	}
 
 	/**
-	 * Retorna un listado ordenado alfabeticamente de categorias existentes en la BBDD
+	 * Retorna un listado ordenado alfabeticamente de categorias existentes en la
+	 * BBDD
 	 */
 	@Override
 	public List<Categoria> findAll() {
@@ -39,7 +41,8 @@ public class CategoriaServiceImpl implements CategoriaService {
 	}
 
 	/**
-	 * Retorna un Optional<> de la entidad Categoria, para luego verificar si existe o no.
+	 * Retorna un Optional<> de la entidad Categoria, para luego verificar si existe
+	 * o no.
 	 */
 	@Override
 	public Optional<Categoria> findById(Integer id) {

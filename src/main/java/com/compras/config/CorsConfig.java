@@ -14,12 +14,14 @@ public class CorsConfig {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 		        registry.addMapping("/login")
-				        .allowedOrigins("http://localhost:4200")
+		        		.allowedOrigins("http://localhost:4200")
+//				        .allowedOrigins("http://listado-compras-front.s3-website-us-east-1.amazonaws.com")
 				        .allowedMethods("*")
 				        .exposedHeaders("*");
     	
 		        registry.addMapping("/**")
 		                .allowedOrigins("http://localhost:4200")
+//		                .allowedOrigins("http://listado-compras-front.s3-website-us-east-1.amazonaws.com")
 		                .allowedMethods("*");
 			}
 		};

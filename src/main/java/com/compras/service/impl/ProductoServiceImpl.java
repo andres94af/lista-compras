@@ -37,7 +37,7 @@ public class ProductoServiceImpl implements ProductoService {
 	public Producto save(Producto producto) {
 		Optional<Producto> productoOpt = productoRepository.findByNombre(producto.getNombre());
 		if (!productoOpt.isPresent()) {
-			return productoRepository.save(producto);		
+			return productoRepository.save(producto);
 		}
 		return productoOpt.get();
 	}

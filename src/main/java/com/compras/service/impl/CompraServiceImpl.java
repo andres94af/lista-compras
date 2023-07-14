@@ -3,10 +3,8 @@ package com.compras.service.impl;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.compras.model.Compra;
 import com.compras.model.Usuario;
 import com.compras.repository.CompraRepository;
@@ -49,8 +47,8 @@ public class CompraServiceImpl implements CompraService {
 	public Compra update(Compra compra) {
 		if (compra.getCompletada()) {
 			compra.setCompletada(false);
-		}else {
-			compra.setCompletada(true);			
+		} else {
+			compra.setCompletada(true);
 		}
 		return compraRepository.save(compra);
 	}
